@@ -1,11 +1,13 @@
-// src/algorithms/alphabeta.js
+// src/algorithms/alphaBeta.js
 
-const alphaBeta = (board, depth, alpha, beta, isMaximizingPlayer) => {
+// Alpha-Beta pruning implementation
+export const alphaBeta = (board, depth, alpha, beta, isMaximizingPlayer) => {
     if (depth === 0 || gameOver(board)) {
       return evaluateBoard(board);
     }
   
     let bestMove = null;
+  
     if (isMaximizingPlayer) {
       let best = -Infinity;
       for (let move of getPossibleMoves(board)) {
@@ -36,15 +38,11 @@ const alphaBeta = (board, depth, alpha, beta, isMaximizingPlayer) => {
   };
   
   const evaluateBoard = (board) => {
-    // A heuristic function to evaluate the board's state (example: prefers more AI walls).
     let score = 0;
     for (let row of board) {
       for (let cell of row) {
-        if (cell === 'AI') {
-          score += 1;
-        } else if (cell === 'Player') {
-          score -= 1;
-        }
+        if (cell === 'AI') score += 1;
+        if (cell === 'Player') score -= 1;
       }
     }
     return score;
@@ -63,15 +61,12 @@ const alphaBeta = (board, depth, alpha, beta, isMaximizingPlayer) => {
   };
   
   const makeMove = (board, move) => {
-    const newBoard = board.map(row => [...row]);  // Deep copy of the board
-    newBoard[move.y][move.x] = 'AI';  // Place an AI wall at the chosen position
+    const newBoard = board.map(row => [...row]);
+    newBoard[move.y][move.x] = 'AI';  // AI places a wall
     return newBoard;
   };
   
   const gameOver = (board) => {
-    // Placeholder for the actual game-over logic (e.g., check if the player has reached the exit).
-    return false;
+    return false;  // Placeholder
   };
-  
-  export default alphaBeta;
   

@@ -1,41 +1,56 @@
 // src/algorithms/minimax.js
 
-// A simple implementation of the Minimax algorithm with Alpha-Beta pruning
+import { alphaBeta } from './alphaBeta';
+
+// Minimax algorithm integrated with Alpha-Beta pruning
 const minimax = (board, depth, isMaximizingPlayer, alpha, beta) => {
   if (depth === 0 || gameOver(board)) {
     return evaluateBoard(board);
   }
 
+  let bestMove = null;
+
   if (isMaximizingPlayer) {
     let best = -Infinity;
     for (let move of getPossibleMoves(board)) {
       const newBoard = makeMove(board, move);
-      best = Math.max(best, minimax(newBoard, depth - 1, false, alpha, beta));
+      const moveValue = alphaBeta(newBoard, depth - 1, alpha, beta, false);  // Using Alpha-Beta Pruning here
+      if (moveValue > best) {
+        best = moveValue;
+        bestMove = move;
+      }
       alpha = Math.max(alpha, best);
-      if (beta <= alpha) break; // Pruning
+      if (beta <= alpha) break;  // Pruning
     }
-    return best;
+    return bestMove;
   } else {
     let best = Infinity;
     for (let move of getPossibleMoves(board)) {
       const newBoard = makeMove(board, move);
-      best = Math.min(best, minimax(newBoard, depth - 1, true, alpha, beta));
+      const moveValue = alphaBeta(newBoard, depth - 1, alpha, beta, true);  // Using Alpha-Beta Pruning here
+      if (moveValue < best) {
+        best = moveValue;
+        bestMove = move;
+      }
       beta = Math.min(beta, best);
-      if (beta <= alpha) break; // Pruning
+      if (beta <= alpha) break;  // Pruning
     }
-    return best;
+    return bestMove;
   }
 };
 
-// Heuristic evaluation function for the AI's board
 const evaluateBoard = (board) => {
-  // The evaluation score based on AI's walls placed
-  return board.reduce((score, row) => {
-    return score + row.filter(cell => cell === 'AI').length;
-  }, 0);
+  // A simple evaluation function to score the board
+  let score = 0;
+  for (let row of board) {
+    for (let cell of row) {
+      if (cell === 'AI') score += 1;
+      if (cell === 'Player') score -= 1;
+    }
+  }
+  return score;
 };
 
-// Get possible moves for wall placement by AI
 const getPossibleMoves = (board) => {
   const moves = [];
   for (let row = 0; row < board.length; row++) {
@@ -48,17 +63,15 @@ const getPossibleMoves = (board) => {
   return moves;
 };
 
-// Apply a move (place a wall at a given position)
 const makeMove = (board, move) => {
-  const newBoard = [...board];
-  newBoard[move.y][move.x] = 'AI'; // AI places a wall
+  const newBoard = board.map(row => [...row]);  // Deep copy
+  newBoard[move.y][move.x] = 'AI';  // AI places a wall
   return newBoard;
 };
 
-// Check if the game is over (a simple placeholder, you can adjust this based on your game logic)
 const gameOver = (board) => {
-  // This is a placeholder; implement a real check for game over
-  return false;
+  // Check if the game is over (e.g., check if the player has reached the exit)
+  return false;  // For now, a placeholder for actual game logic
 };
 
 export default minimax;

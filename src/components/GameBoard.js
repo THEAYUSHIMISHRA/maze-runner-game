@@ -1,13 +1,12 @@
 // src/components/GameBoard.js
 import React, { useState, useEffect } from "react";
-import "../components/styles/GameBoard.css"; 
+import "../components/styles/GameBoard.css";
 import { aStar } from "../algorithms/astar";
-import alphaBeta from "../algorithms/alphaBeta";
+import minimax from '../algorithms/minimax';
 
-const GRID_SIZE = 10; // 10x10 Grid
-const CELL_SIZE = 50; // Size of each cell in pixels
+const GRID_SIZE = 10;
+const CELL_SIZE = 50;
 
-// Initialize walls (random placement)
 const generateWalls = () => {
   const walls = new Set();
   while (walls.size < 15) {
@@ -21,12 +20,26 @@ const generateWalls = () => {
 };
 
 const GameBoard = () => {
-  const [playerPos, setPlayerPos] = useState({ x: 0, y: 0 }); // Player start
-  const [walls] = useState(generateWalls()); // Static walls on mount  + for future dynamic upgrades
-  const [path, setPath] = useState([]); // A* path
+  const [playerPos, setPlayerPos] = useState({ x: 0, y: 0 });
+  const [walls, setWalls] = useState(generateWalls());
+  const [path, setPath] = useState([]);
+  const [board, setBoard] = useState(createBoard({ x: 0, y: 0 }, generateWalls()));
+  const [aiTurn, setAiTurn] = useState(false);
   const exitPos = { x: GRID_SIZE - 1, y: GRID_SIZE - 1 };
 
-  // Handle player movement
+  function createBoard(player, wallsSet) {
+    const board = Array.from({ length: GRID_SIZE }, () =>
+      Array(GRID_SIZE).fill("empty")
+    );
+    board[player.y][player.x] = "Player";
+    board[exitPos.y][exitPos.x] = "Exit";
+    wallsSet.forEach((w) => {
+      const [x, y] = w.split(",").map(Number);
+      board[y][x] = "Wall";
+    });
+    return board;
+  }
+
   const handleKeyPress = (event) => {
     setPlayerPos((prev) => {
       let newX = prev.x;
@@ -37,17 +50,40 @@ const GameBoard = () => {
       if (event.key === "ArrowLeft" && prev.x > 0 && !walls.has(`${prev.x - 1},${prev.y}`)) newX--;
       if (event.key === "ArrowRight" && prev.x < GRID_SIZE - 1 && !walls.has(`${prev.x + 1},${prev.y}`)) newX++;
 
+      if (newX !== prev.x || newY !== prev.y) {
+        setAiTurn(true);  // AI will move after player
+      }
+
       return { x: newX, y: newY };
     });
   };
 
-  // A* path calculation on move
   useEffect(() => {
     const foundPath = aStar(playerPos, exitPos, walls, GRID_SIZE);
     setPath(foundPath);
+
+    const updatedBoard = createBoard(playerPos, walls);
+    setBoard(updatedBoard);
   }, [playerPos, walls]);
 
-  // Add key event listener
+  useEffect(() => {
+    if (aiTurn) {
+      const timer = setTimeout(() => {
+        const move = minimax(board, 2, true, -Infinity, Infinity);
+        if (move) {
+          const wallStr = `${move.x},${move.y}`;
+          if (!walls.has(wallStr)) {
+            const newWalls = new Set(walls);
+            newWalls.add(wallStr);
+            setWalls(newWalls);
+          }
+        }
+        setAiTurn(false);
+      }, 500); // Delay for AI move
+      return () => clearTimeout(timer);
+    }
+  }, [aiTurn, board, walls]);
+
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
@@ -61,11 +97,12 @@ const GameBoard = () => {
             {[...Array(GRID_SIZE)].map((_, col) => {
               let cellClass = "cell";
               const inPath = path.some((p) => p.x === col && p.y === row);
+              const key = `${col},${row}`;
 
               if (playerPos.x === col && playerPos.y === row) cellClass += " player";
-              if (exitPos.x === col && exitPos.y === row) cellClass += " exit";
-              if (walls.has(`${col},${row}`)) cellClass += " wall";
-              if (inPath) cellClass += " path";
+              else if (exitPos.x === col && exitPos.y === row) cellClass += " exit";
+              else if (walls.has(key)) cellClass += " wall";
+              else if (inPath) cellClass += " path";
 
               return <div key={col} className={cellClass}></div>;
             })}
