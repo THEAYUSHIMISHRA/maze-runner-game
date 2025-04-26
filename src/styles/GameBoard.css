@@ -1,47 +1,79 @@
 .game-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
-  }
+  min-height: 100vh;
+  background-image: url('/assets/background.jpg'); /* We'll add background.jpg */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
   
   .grid {
     display: grid;
-    grid-template-columns: repeat(10, 50px);  /* 10 columns of 50px */
-    grid-template-rows: repeat(10, 50px);  /* 10 rows of 50px */
-    gap: 2px;
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
+    gap: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
   }
   
   .cell {
     width: 50px;
     height: 50px;
-    background-color: lightgrey;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background-color: rgba(255, 255, 255, 0.6);
     border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: all 0.3s ease;
   }
   
   .cell.player {
-    background-color: blue;  /* Player position */
+    background-color: #4CAF50;
+    background-image: url('../assets/player-icon.png');
+    background-size: cover;
+    background-position: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px #4CAF50;
   }
   
   .cell.exit {
-    background-color: green;  /* Exit position */
+    background-color: gold;
+    background-image: url('../assets/portal.png');
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 0 10px gold;
   }
   
   .cell.wall {
-    background-color: black;  /* Wall position */
+    background-color: #555;
+    background-image: url('../assets/wall-texture.png');
+    background-size: cover;
+    animation: wallFadeIn 0.5s ease;
   }
   
   .cell.path {
-    background-color: yellow;  /* Path highlighted by A* algorithm */
+    background-color: rgba(30, 144, 255, 0.4);
+    border: 1px dashed #1E90FF;
   }
-  
+  /* Wall Fade Animation */
+@keyframes wallFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
   .row {
     display: flex;
   }
   .path {
     background-color: rgba(0, 255, 0, 0.3); /* Light green path */
   }
+  body {
+    margin: 0;
+    padding: 0;
+    background-image: url('../assets/maze-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    font-family: 'Poppins', sans-serif;
+  }
+  

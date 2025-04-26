@@ -89,6 +89,15 @@ const GameBoard = () => {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, []);
 
+  useEffect(() => {
+    if (playerPos.x === exitPos.x && playerPos.y === exitPos.y) {
+      setTimeout(() => {
+        alert('🎉 Congratulations! You escaped the Maze!');
+        window.location.reload();
+      }, 300);
+    }
+  }, [playerPos]); /*victory message*/
+
   return (
     <div className="game-container">
       <div className="grid">
