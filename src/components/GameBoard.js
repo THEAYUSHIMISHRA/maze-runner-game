@@ -3,9 +3,16 @@ import React, { useState, useEffect } from "react";
 import "../components/styles/GameBoard.css";
 import { aStar } from "../algorithms/astar";
 import minimax from '../algorithms/minimax';
-import backgroundMusicFile from '../assets/background-music.mp3';
-import moveSoundFile from '../assets/move-sound.wav';
-import portalSoundFile from '../assets/portal-sound.wav';
+
+import MazeBackground from '../assets/images/maze-bg.jpg';
+import WallTexture from '../assets/images/wall-texture.png';
+import PlayerIcon from '../assets/images/player-icon.png';
+import PortalIcon from '../assets/images/portal.png';
+
+import BackgroundMusic from '../assets/sounds/background-music.mp3';
+import PortalSound from '../assets/sounds/portal-sound.mp3';
+import MoveSound from '../assets/sounds/move-sound.mp3';
+import WallPlaceSound from '../assets/sounds/wall-place-sound.mp3';
 
 const GRID_SIZE = 10;
 const CELL_SIZE = 50;
@@ -33,9 +40,10 @@ const GameBoard = () => {
   const [victory, setVictory] = useState(false);
 
   
-  const backgroundMusic = new Audio(backgroundMusicFile);
-  const moveSound = new Audio(moveSoundFile);
-  const portalSound = new Audio(portalSoundFile);
+  const backgroundMusic = new Audio(BackgroundMusic);
+  const moveSound = new Audio(MoveSound);
+  const portalSound = new Audio(PortalSound);
+  const wallPlaceSound = new Audio(WallPlaceSound);
 
   const exitPos = { x: GRID_SIZE - 1, y: GRID_SIZE - 1 };
 
@@ -106,6 +114,8 @@ const GameBoard = () => {
             const newWalls = new Set(walls);
             newWalls.add(wallStr);
             setWalls(newWalls);
+
+            wallPlaceSound.play();  // wall placement sound
           }
         }
         setAiTurn(false);
@@ -130,7 +140,7 @@ const GameBoard = () => {
   }, [playerPos]);
 
   return (
-    <div className="game-container">
+    <div className="game-container"style={{ backgroundImage: `url(${MazeBackground})` }}>
       {isLoading ? (
         <div className="loading">Loading Maze...</div>
       ) : !gameStarted ? (
@@ -145,13 +155,13 @@ const GameBoard = () => {
         </div>
       ) : (
         <>
-          {/* 🎵 Music Player */}
+          {/* 🎵 Music Player
           <div className="music-player">
             <audio controls autoPlay loop>
               <source src={backgroundMusicFile} type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>
-          </div>
+          </div> */}
   
           {/* 🧩 Maze Grid */}
           <div className="grid">
