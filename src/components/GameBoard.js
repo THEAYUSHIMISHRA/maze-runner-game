@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 import "../components/styles/GameBoard.css";
 import { aStar } from "../algorithms/astar";
 import minimax from '../algorithms/minimax';
+import backgroundMusicFile from '../assets/background-music.mp3';
+import moveSoundFile from '../assets/move-sound.wav';
+import portalSoundFile from '../assets/portal-sound.wav';
 
 const GRID_SIZE = 10;
 const CELL_SIZE = 50;
@@ -25,6 +28,13 @@ const GameBoard = () => {
   const [path, setPath] = useState([]);
   const [board, setBoard] = useState(createBoard({ x: 0, y: 0 }, generateWalls()));
   const [aiTurn, setAiTurn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasWon, setHasWon] = useState(false);
+  
+  const backgroundMusic = new Audio(backgroundMusicFile);
+  const moveSound = new Audio(moveSoundFile);
+  const portalSound = new Audio(portalSoundFile);
+
   const exitPos = { x: GRID_SIZE - 1, y: GRID_SIZE - 1 };
 
   function createBoard(player, wallsSet) {
@@ -44,19 +54,37 @@ const GameBoard = () => {
     setPlayerPos((prev) => {
       let newX = prev.x;
       let newY = prev.y;
-
+  
       if (event.key === "ArrowUp" && prev.y > 0 && !walls.has(`${prev.x},${prev.y - 1}`)) newY--;
       if (event.key === "ArrowDown" && prev.y < GRID_SIZE - 1 && !walls.has(`${prev.x},${prev.y + 1}`)) newY++;
       if (event.key === "ArrowLeft" && prev.x > 0 && !walls.has(`${prev.x - 1},${prev.y}`)) newX--;
       if (event.key === "ArrowRight" && prev.x < GRID_SIZE - 1 && !walls.has(`${prev.x + 1},${prev.y}`)) newX++;
-
+  
       if (newX !== prev.x || newY !== prev.y) {
-        setAiTurn(true);  // AI will move after player
+        moveSound.play();   // sound play on moving 
+        setAiTurn(true);     // AI turn trigger karo
       }
-
+  
       return { x: newX, y: newY };
     });
   };
+  
+  
+  useEffect(() => {
+    backgroundMusic.loop = true;
+    backgroundMusic.volume = 0.5;
+    backgroundMusic.play();
+
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => {
+      clearTimeout(timer);
+      backgroundMusic.pause();
+      backgroundMusic.currentTime = 0;
+    };
+  }, []);
 
   useEffect(() => {
     const foundPath = aStar(playerPos, exitPos, walls, GRID_SIZE);
@@ -79,7 +107,7 @@ const GameBoard = () => {
           }
         }
         setAiTurn(false);
-      }, 500); // Delay for AI move
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [aiTurn, board, walls]);
@@ -96,10 +124,18 @@ const GameBoard = () => {
         window.location.reload();
       }, 300);
     }
-  }, [playerPos]); /*victory message*/
+  }, [playerPos]);
 
   return (
     <div className="game-container">
+      {/* 🎵 Audio Player added here */}
+      <div className="music-player">
+        <audio controls autoPlay loop>
+          <source src={backgroundMusicFile} type="audio/mpeg" />
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+
       <div className="grid">
         {[...Array(GRID_SIZE)].map((_, row) => (
           <div key={row} className="row">
