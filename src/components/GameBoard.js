@@ -119,10 +119,12 @@ const GameBoard = () => {
 
   useEffect(() => {
     if (playerPos.x === exitPos.x && playerPos.y === exitPos.y) {
+      portalSound.play(); //play Portal sound
+  
       setTimeout(() => {
         alert('🎉 Congratulations! You escaped the Maze!');
         window.location.reload();
-      }, 300);
+      }, 800); // let the portal sound play before reload 
     }
   }, [playerPos]);
 
