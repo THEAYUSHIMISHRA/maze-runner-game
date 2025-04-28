@@ -29,7 +29,9 @@ const GameBoard = () => {
   const [board, setBoard] = useState(createBoard({ x: 0, y: 0 }, generateWalls()));
   const [aiTurn, setAiTurn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [hasWon, setHasWon] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [victory, setVictory] = useState(false);
+
   
   const backgroundMusic = new Audio(backgroundMusicFile);
   const moveSound = new Audio(moveSoundFile);
@@ -122,42 +124,59 @@ const GameBoard = () => {
       portalSound.play(); //play Portal sound
   
       setTimeout(() => {
-        alert('🎉 Congratulations! You escaped the Maze!');
-        window.location.reload();
+        setVictory(true); //  Victory screen show
       }, 800); // let the portal sound play before reload 
     }
   }, [playerPos]);
 
   return (
     <div className="game-container">
-      {/* 🎵 Audio Player added here */}
-      <div className="music-player">
-        <audio controls autoPlay loop>
-          <source src={backgroundMusicFile} type="audio/mpeg" />
-          Your browser does not support the audio element.
-        </audio>
-      </div>
-
-      <div className="grid">
-        {[...Array(GRID_SIZE)].map((_, row) => (
-          <div key={row} className="row">
-            {[...Array(GRID_SIZE)].map((_, col) => {
-              let cellClass = "cell";
-              const inPath = path.some((p) => p.x === col && p.y === row);
-              const key = `${col},${row}`;
-
-              if (playerPos.x === col && playerPos.y === row) cellClass += " player";
-              else if (exitPos.x === col && exitPos.y === row) cellClass += " exit";
-              else if (walls.has(key)) cellClass += " wall";
-              else if (inPath) cellClass += " path";
-
-              return <div key={col} className={cellClass}></div>;
-            })}
+      {isLoading ? (
+        <div className="loading">Loading Maze...</div>
+      ) : !gameStarted ? (
+        <div className="start-screen">
+          <h1>Strategic Maze Runner</h1>
+          <button onClick={() => setGameStarted(true)}>Start Game</button>
+        </div>
+      ) : victory ? (
+        <div className="victory-screen">
+          <h1>🎉 Congratulations! You Escaped the Maze!</h1>
+          <button onClick={() => window.location.reload()}>Play Again</button>
+        </div>
+      ) : (
+        <>
+          {/* 🎵 Music Player */}
+          <div className="music-player">
+            <audio controls autoPlay loop>
+              <source src={backgroundMusicFile} type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
           </div>
-        ))}
-      </div>
+  
+          {/* 🧩 Maze Grid */}
+          <div className="grid">
+            {[...Array(GRID_SIZE)].map((_, row) => (
+              <div key={row} className="row">
+                {[...Array(GRID_SIZE)].map((_, col) => {
+                  let cellClass = "cell";
+                  const inPath = path.some((p) => p.x === col && p.y === row);
+                  const key = `${col},${row}`;
+  
+                  if (playerPos.x === col && playerPos.y === row) cellClass += " player";
+                  else if (exitPos.x === col && exitPos.y === row) cellClass += " exit";
+                  else if (walls.has(key)) cellClass += " wall";
+                  else if (inPath) cellClass += " path";
+  
+                  return <div key={col} className={cellClass}></div>;
+                })}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
+  
 };
 
 export default GameBoard;
