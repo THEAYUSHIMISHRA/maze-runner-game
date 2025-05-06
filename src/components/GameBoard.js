@@ -161,7 +161,8 @@ const GameBoard = () => {
               <source src={backgroundMusicFile} type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>
-          </div> */}
+          </div> */}  
+          {/* no need as it js is handling the audio  */}
   
           {/* 🧩 Maze Grid */}
           <div className="grid">
