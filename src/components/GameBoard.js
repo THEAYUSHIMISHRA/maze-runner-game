@@ -1,5 +1,5 @@
 // src/components/GameBoard.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../components/styles/GameBoard.css";
 import { aStar } from "../algorithms/astar";
 import minimax from '../algorithms/minimax';
@@ -39,10 +39,10 @@ const GameBoard = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [victory, setVictory] = useState(false);
 
-  const backgroundMusic = new Audio(BackgroundMusic);
-  const moveSound = new Audio(MoveSound);
-  const portalSound = new Audio(PortalSound);
-  const wallPlaceSound = new Audio(WallPlaceSound);
+  const backgroundMusic = useRef(new Audio(BackgroundMusic));
+  const moveSound = useRef(new Audio(MoveSound));
+  const portalSound = useRef(new Audio(PortalSound));
+  const wallPlaceSound = useRef(new Audio(WallPlaceSound));
 
   const exitPos = { x: GRID_SIZE - 1, y: GRID_SIZE - 1 };
 
@@ -67,10 +67,11 @@ const GameBoard = () => {
       if (event.key === "ArrowUp" && prev.y > 0 && !walls.has(`${prev.x},${prev.y - 1}`)) newY--;
       if (event.key === "ArrowDown" && prev.y < GRID_SIZE - 1 && !walls.has(`${prev.x},${prev.y + 1}`)) newY++;
       if (event.key === "ArrowLeft" && prev.x > 0 && !walls.has(`${prev.x - 1},${prev.y}`)) newX--;
-      if (event.key === "ArrowRight" && prev.x < GRID_SIZE - 1 && !walls.has(`${prev.x + 1},${prev.y}`)) newX--;
+      if (event.key === "ArrowRight" && prev.x < GRID_SIZE - 1 && !walls.has(`${prev.x + 1},${prev.y}`)) newX++;
 
       if (newX !== prev.x || newY !== prev.y) {
-        moveSound.play();
+        moveSound.current.currentTime = 0;
+        moveSound.current.play().catch((err) => console.warn("Move sound blocked:", err));
         setAiTurn(true);
       }
 
@@ -79,9 +80,14 @@ const GameBoard = () => {
   };
 
   useEffect(() => {
-    backgroundMusic.loop = true;
-    backgroundMusic.volume = 0.5;
-    backgroundMusic.play();
+    const music = backgroundMusic.current;
+    music.loop = true;
+    music.volume = 0.5;
+    music.play().catch((err) => console.warn("Background music autoplay blocked:", err));
+
+    portalSound.current.volume = 0.4;
+    moveSound.current.volume = 0.6;
+    wallPlaceSound.current.volume = 0.7;
 
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -89,8 +95,8 @@ const GameBoard = () => {
 
     return () => {
       clearTimeout(timer);
-      backgroundMusic.pause();
-      backgroundMusic.currentTime = 0;
+      music.pause();
+      music.currentTime = 0;
     };
   }, []);
 
@@ -112,7 +118,8 @@ const GameBoard = () => {
             const newWalls = new Set(walls);
             newWalls.add(wallStr);
             setWalls(newWalls);
-            wallPlaceSound.play();
+            wallPlaceSound.current.currentTime = 0;
+            wallPlaceSound.current.play().catch((err) => console.warn("Wall sound blocked:", err));
           }
         }
         setAiTurn(false);
@@ -128,7 +135,8 @@ const GameBoard = () => {
 
   useEffect(() => {
     if (playerPos.x === exitPos.x && playerPos.y === exitPos.y) {
-      portalSound.play();
+      portalSound.current.currentTime = 0;
+      portalSound.current.play().catch((err) => console.warn("Portal sound blocked:", err));
       setTimeout(() => setVictory(true), 800);
     }
   }, [playerPos]);
@@ -149,7 +157,6 @@ const GameBoard = () => {
         </div>
       ) : (
         <>
-          {/* 🧩 Maze Grid */}
           <div className="grid">
             {[...Array(GRID_SIZE)].map((_, row) => (
               <div key={row} className="row">
