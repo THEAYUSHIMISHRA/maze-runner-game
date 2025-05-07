@@ -39,7 +39,6 @@ const GameBoard = () => {
   const [gameStarted, setGameStarted] = useState(false);
   const [victory, setVictory] = useState(false);
 
-  
   const backgroundMusic = new Audio(BackgroundMusic);
   const moveSound = new Audio(MoveSound);
   const portalSound = new Audio(PortalSound);
@@ -64,22 +63,21 @@ const GameBoard = () => {
     setPlayerPos((prev) => {
       let newX = prev.x;
       let newY = prev.y;
-  
+
       if (event.key === "ArrowUp" && prev.y > 0 && !walls.has(`${prev.x},${prev.y - 1}`)) newY--;
       if (event.key === "ArrowDown" && prev.y < GRID_SIZE - 1 && !walls.has(`${prev.x},${prev.y + 1}`)) newY++;
       if (event.key === "ArrowLeft" && prev.x > 0 && !walls.has(`${prev.x - 1},${prev.y}`)) newX--;
-      if (event.key === "ArrowRight" && prev.x < GRID_SIZE - 1 && !walls.has(`${prev.x + 1},${prev.y}`)) newX++;
-  
+      if (event.key === "ArrowRight" && prev.x < GRID_SIZE - 1 && !walls.has(`${prev.x + 1},${prev.y}`)) newX--;
+
       if (newX !== prev.x || newY !== prev.y) {
-        moveSound.play();   // sound play on moving 
-        setAiTurn(true);     // AI turn trigger karo
+        moveSound.play();
+        setAiTurn(true);
       }
-  
+
       return { x: newX, y: newY };
     });
   };
-  
-  
+
   useEffect(() => {
     backgroundMusic.loop = true;
     backgroundMusic.volume = 0.5;
@@ -114,8 +112,7 @@ const GameBoard = () => {
             const newWalls = new Set(walls);
             newWalls.add(wallStr);
             setWalls(newWalls);
-
-            wallPlaceSound.play();  // wall placement sound
+            wallPlaceSound.play();
           }
         }
         setAiTurn(false);
@@ -131,16 +128,13 @@ const GameBoard = () => {
 
   useEffect(() => {
     if (playerPos.x === exitPos.x && playerPos.y === exitPos.y) {
-      portalSound.play(); //play Portal sound
-  
-      setTimeout(() => {
-        setVictory(true); //  Victory screen show
-      }, 800); // let the portal sound play before reload 
+      portalSound.play();
+      setTimeout(() => setVictory(true), 800);
     }
   }, [playerPos]);
 
   return (
-    <div className="game-container"style={{ backgroundImage: `url(${MazeBackground})` }}>
+    <div className="game-container" style={{ backgroundImage: `url(${MazeBackground})` }}>
       {isLoading ? (
         <div className="loading">Loading Maze...</div>
       ) : !gameStarted ? (
@@ -155,15 +149,6 @@ const GameBoard = () => {
         </div>
       ) : (
         <>
-          {/* 🎵 Music Player
-          <div className="music-player">
-            <audio controls autoPlay loop>
-              <source src={backgroundMusicFile} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-          </div> */}  
-          {/* no need as it js is handling the audio  */}
-  
           {/* 🧩 Maze Grid */}
           <div className="grid">
             {[...Array(GRID_SIZE)].map((_, row) => (
@@ -172,13 +157,30 @@ const GameBoard = () => {
                   let cellClass = "cell";
                   const inPath = path.some((p) => p.x === col && p.y === row);
                   const key = `${col},${row}`;
-  
-                  if (playerPos.x === col && playerPos.y === row) cellClass += " player";
-                  else if (exitPos.x === col && exitPos.y === row) cellClass += " exit";
-                  else if (walls.has(key)) cellClass += " wall";
-                  else if (inPath) cellClass += " path";
-  
-                  return <div key={col} className={cellClass}></div>;
+
+                  if (inPath) cellClass += " path";
+
+                  return (
+                    <div
+                      key={col}
+                      className={cellClass}
+                      style={{
+                        width: CELL_SIZE,
+                        height: CELL_SIZE,
+                        position: "relative",
+                      }}
+                    >
+                      {playerPos.x === col && playerPos.y === row && (
+                        <img src={PlayerIcon} alt="Player" className="cell-image" />
+                      )}
+                      {exitPos.x === col && exitPos.y === row && (
+                        <img src={PortalIcon} alt="Portal" className="cell-image" />
+                      )}
+                      {walls.has(key) && (
+                        <img src={WallTexture} alt="Wall" className="cell-image" />
+                      )}
+                    </div>
+                  );
                 })}
               </div>
             ))}
@@ -187,7 +189,6 @@ const GameBoard = () => {
       )}
     </div>
   );
-  
 };
 
 export default GameBoard;

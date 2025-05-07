@@ -41,6 +41,15 @@
   transform: scale(1);
 }
 
+.cell-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .cell:hover {
   transform: scale(1.05);
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
