@@ -1,11 +1,10 @@
-// src/components/GameBoard.js
 import React, { useState, useEffect, useRef } from "react";
 import "../components/styles/GameBoard.css";
 import { aStar } from "../algorithms/astar";
 import minimax from '../algorithms/minimax';
 
 import MazeBackground from '../assets/images/maze-bg.jpg';
-import WallTexture from '../assets/images/wall-texture.png';
+import WallTexture from '../assets/images/wall-texture.jpg';
 import PlayerIcon from '../assets/images/player-icon.png';
 import PortalIcon from '../assets/images/portal.png';
 
@@ -16,6 +15,8 @@ import WallPlaceSound from '../assets/sounds/wall-place-sound.mp3';
 
 const GRID_SIZE = 10;
 const CELL_SIZE = 50;
+
+const exitPos = { x: GRID_SIZE - 1, y: GRID_SIZE - 1 };
 
 const generateWalls = () => {
   const walls = new Set();
@@ -38,13 +39,12 @@ const GameBoard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [gameStarted, setGameStarted] = useState(false);
   const [victory, setVictory] = useState(false);
+  const [musicStarted, setMusicStarted] = useState(false);  // State to track music start
 
   const backgroundMusic = useRef(new Audio(BackgroundMusic));
   const moveSound = useRef(new Audio(MoveSound));
   const portalSound = useRef(new Audio(PortalSound));
   const wallPlaceSound = useRef(new Audio(WallPlaceSound));
-
-  const exitPos = { x: GRID_SIZE - 1, y: GRID_SIZE - 1 };
 
   function createBoard(player, wallsSet) {
     const board = Array.from({ length: GRID_SIZE }, () =>
@@ -83,7 +83,11 @@ const GameBoard = () => {
     const music = backgroundMusic.current;
     music.loop = true;
     music.volume = 0.5;
-    music.play().catch((err) => console.warn("Background music autoplay blocked:", err));
+
+    // Play music only after user interaction
+    if (musicStarted) {
+      music.play().catch((err) => console.warn("Background music autoplay blocked:", err));
+    }
 
     portalSound.current.volume = 0.4;
     moveSound.current.volume = 0.6;
@@ -98,7 +102,7 @@ const GameBoard = () => {
       music.pause();
       music.currentTime = 0;
     };
-  }, []);
+  }, [musicStarted]);  // Trigger music when interaction occurs
 
   useEffect(() => {
     const foundPath = aStar(playerPos, exitPos, walls, GRID_SIZE);
@@ -148,7 +152,7 @@ const GameBoard = () => {
       ) : !gameStarted ? (
         <div className="start-screen">
           <h1>Strategic Maze Runner</h1>
-          <button onClick={() => setGameStarted(true)}>Start Game</button>
+          <button onClick={() => { setGameStarted(true); setMusicStarted(true); }}>Start Game</button>
         </div>
       ) : victory ? (
         <div className="victory-screen">

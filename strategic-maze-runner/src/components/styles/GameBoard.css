@@ -1,6 +1,6 @@
 .game-container {
   min-height: 100vh;
-  background-image: url('/assets/maze-bg.jpg');
+  background-image: url('strategic maze runner/src/assets/maze-bg.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
