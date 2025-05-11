@@ -1,6 +1,7 @@
 # 🎮 Strategic Maze Runner Game
 
-> 🚀 Step into a world where intelligence meets strategy!  
+> 🚀 Step into a world where intelligence meets strategy!
+
 > The **Strategic Maze Runner** isn’t just another maze game – it’s a battle of brains between you and a powerful AI. With stunning visuals, immersive sound, and real-time decision-making, this game brings algorithms to life in a thrilling adventure.
 
 A dynamic and intelligent maze-solving game built using **React + Vite**, powered by the **A\*** pathfinding algorithm and **Minmax with Alpha-Beta pruning** for AI wall placement. Includes immersive UI with custom images and sound effects.
@@ -82,6 +83,7 @@ npm run dev
 ✅A* Pathfinding:  Efficiently finds the shortest path to the goal.
 ✅Minimax Algorithm:  AI decides the most strategic wall placement.
 ✅Alpha-Beta Pruning:  Optimizes AI decision tree by eliminating redundant branches.
+
 
 📝 License
 This project is licensed under the MIT License.
