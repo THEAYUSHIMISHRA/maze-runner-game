@@ -74,7 +74,6 @@ npm install
 # Run the app
 npm run dev
 
------
 ## 🎮 Controls
 
 - Use arrow keys (↑ ↓ ← →) to move the player.
@@ -88,7 +87,10 @@ npm run dev
 - **Alpha-Beta Pruning**: Optimizes AI decision tree by eliminating redundant branches.
 
 ## 📸 Screenshots
+
 ![Game Screenshot](https://github.com/THEAYUSHIMISHRA/maze-runner-game/blob/main/strategic-maze-runner/src/assets/images/demo.png?raw=true)
 
-###📝 License
-This project is licensed under the MIT License.
+### 📝 License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
