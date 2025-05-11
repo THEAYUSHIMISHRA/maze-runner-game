@@ -101,7 +101,7 @@ npm run dev
 ```
 ✅ A* Pathfinding  
    • Efficiently finds the shortest path to the goal.  
-✅ Minimax Algorithm  
+✅ Minmax Algorithm  
    • AI simulates player moves and places optimal blocking walls.  
 ✅ Alpha-Beta Pruning  
    • Improves Minimax by cutting off unneeded branches.
