@@ -73,6 +73,7 @@ npm install
 
 # Run the app
 npm run dev
+---
 
 ## 🎮 Controls
 
@@ -80,17 +81,23 @@ npm run dev
 - Avoid AI-placed walls and reach the portal at bottom-right.
 - AI uses Minimax to place walls after every move.
 
+---
+
 ## 🧠 Algorithms Used
 
 - **A* Pathfinding**: Efficiently finds the shortest path to the goal.
 - **Minimax Algorithm**: AI decides the most strategic wall placement.
 - **Alpha-Beta Pruning**: Optimizes AI decision tree by eliminating redundant branches.
 
+---
+
 ## 📸 Screenshots
 
 ![Game Screenshot](https://github.com/THEAYUSHIMISHRA/maze-runner-game/blob/main/strategic-maze-runner/src/assets/images/demo.png?raw=true)
 
-### 📝 License
+---
+
+## 📝 License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
