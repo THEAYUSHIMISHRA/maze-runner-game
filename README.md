@@ -74,7 +74,7 @@ npm install
 # Run the app
 npm run dev
 
-🎮 Controls
+##🎮 Controls
 • Use arrow keys (↑ ↓ ← →) to move the player.
 • Avoid AI-placed walls and reach the portal at bottom-right.
 • AI uses Minimax to place walls after every move.
@@ -84,6 +84,8 @@ npm run dev
 ✅Minimax Algorithm:  AI decides the most strategic wall placement.
 ✅Alpha-Beta Pruning:  Optimizes AI decision tree by eliminating redundant branches.
 
+##📸 Screenshots
+![Project Demo](images/demo.png)
 
-📝 License
+###📝 License
 This project is licensed under the MIT License.
