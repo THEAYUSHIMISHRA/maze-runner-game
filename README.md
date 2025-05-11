@@ -1,3 +1,4 @@
+
 # 🎮 Strategic Maze Runner Game
 
 > 🚀 Step into a world where intelligence meets strategy!
@@ -6,6 +7,8 @@
 
 A dynamic and intelligent maze-solving game built using **React + Vite**, powered by the **A\*** pathfinding algorithm and **Minmax with Alpha-Beta pruning** for AI wall placement. Includes immersive UI with custom images and sound effects.
 
+---
+
 ## 🚀 Features
 - 🔄 **Real-time AI** places walls to block your path using **Minmax** strategy.
 - 🌟 **A\*** algorithm finds the shortest path from player to portal.
@@ -13,7 +16,7 @@ A dynamic and intelligent maze-solving game built using **React + Vite**, powere
 - 🔊 Background music & sound effects for movement, portal, and wall placement.
 - 🧱 Randomly generated wall positions on game start.
 - 🖼️ Beautiful maze design with custom textures and images.
-- 🎉 Victory screen on successful escape.
+- 🎉 Victory screen on successful escape.  
 
 ---
 
@@ -29,35 +32,40 @@ A dynamic and intelligent maze-solving game built using **React + Vite**, powere
 | Code Editor      | VS Code                                      |
 | Package Manager  | npm                                          |
 
+---
+
 ## 📂 Folder Structure
+
+```
 strategic-maze-runner-game/
 ├── public/
-│ └── (favicon and static assets)
+│   └── (favicon and static assets)
 ├── src/
-│ ├── assets/
-│ │ ├── images/
-│ │ └── sounds/
-│ ├── algorithms/
-│ │ ├── astar.js
-│ │ └── minimax.js
-│ ├── components/
-│ │ ├── GameBoard.jsx
-│ │ └── styles/GameBoard.css
-│ └── App.jsx
+│   ├── assets/
+│   │   ├── images/
+│   │   └── sounds/
+│   ├── algorithms/
+│   │   ├── astar.js
+│   │   └── minimax.js
+│   ├── components/
+│   │   ├── GameBoard.jsx
+│   │   └── styles/GameBoard.css
+│   └── App.jsx
 ├── index.html
 ├── package.json
 ├── vite.config.js
 ├── LICENSE
 └── README.md
+```
 
+---
 
 ## ⚙️ Setup Instructions
-Follow these steps to run the project locally:
 
 ### ✅ Prerequisites
 
 - Node.js and npm installed  
-  (Download from [https://nodejs.org](https://nodejs.org))
+  👉 Download from [https://nodejs.org](https://nodejs.org)
 
 ### 🧪 Run Locally
 
@@ -73,25 +81,35 @@ npm install
 
 # Run the app
 npm run dev
+```
+
 ---
 
 ## 🎮 Controls
 
-- Use arrow keys (↑ ↓ ← →) to move the player.
-- Avoid AI-placed walls and reach the portal at bottom-right.
-- AI uses Minimax to place walls after every move.
+```
+↑ ↓ ← → : Move the player  
+🚫 Avoid AI-placed walls  
+🎯 Reach the portal at bottom-right  
+🧠 AI places a wall after every move using Minimax
+```
 
 ---
 
 ## 🧠 Algorithms Used
 
-- **A* Pathfinding**: Efficiently finds the shortest path to the goal.
-- **Minimax Algorithm**: AI decides the most strategic wall placement.
-- **Alpha-Beta Pruning**: Optimizes AI decision tree by eliminating redundant branches.
+```
+✅ A* Pathfinding  
+   • Efficiently finds the shortest path to the goal.  
+✅ Minimax Algorithm  
+   • AI simulates player moves and places optimal blocking walls.  
+✅ Alpha-Beta Pruning  
+   • Improves Minimax by cutting off unneeded branches.
+```
 
 ---
 
-## 📸 Screenshots
+## 📸 Screenshot
 
 ![Game Screenshot](https://github.com/THEAYUSHIMISHRA/maze-runner-game/blob/main/strategic-maze-runner/src/assets/images/demo.png?raw=true)
 
@@ -99,5 +117,10 @@ npm run dev
 
 ## 📝 License
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+```
 
+This project is licensed under the MIT License.
+
+```
+
+---
