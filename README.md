@@ -85,7 +85,8 @@ npm run dev
 ✅Alpha-Beta Pruning:  Optimizes AI decision tree by eliminating redundant branches.
 
 ##📸 Screenshots
-![Project Demo](images/demo.png)
+![Game Screenshot](src/assets/images/demo.png)
+
 
 ###📝 License
 This project is licensed under the MIT License.
