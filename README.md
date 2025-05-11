@@ -85,7 +85,7 @@ npm run dev
 ✅Alpha-Beta Pruning:  Optimizes AI decision tree by eliminating redundant branches.
 
 ##📸 Screenshots
-![Game Screenshot](src/assets/images/demo.png)
+![Game Screenshot](strategic-maze-runner/src/assets/images/demo.png)
 
 
 ###📝 License
